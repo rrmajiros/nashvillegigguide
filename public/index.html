@@ -341,16 +341,11 @@
                 </p>
                 
                 <div class="email-form">
-                    <form id="signup-form" onsubmit="return handleSubmit(event)">
-                        <div class="form-group">
-                            <input type="email" id="email" class="email-input" placeholder="Your email address" required>
-                            <button type="submit" class="submit-btn">Get Early Access</button>
-                        </div>
-                        <p class="form-note">No spam. Unsubscribe anytime. We respect your privacy.</p>
-                    </form>
-                    <div id="success-message" style="display: none; background: #d4edda; color: #155724; padding: 15px; border-radius: 8px; margin-top: 20px;">
-                        Thanks! We'll notify you when we launch.
-                    </div>
+                    <!-- Fillout Form Embed -->
+                    <div style="width:100%;height:500px;" data-fillout-id="no1NpSyBbmus" data-fillout-embed-type="standard" data-fillout-inherit-parameters data-fillout-dynamic-resize></div>
+                    <script src="https://server.fillout.com/embed/v1/"></script>
+                    
+                    <p class="form-note">No spam. Unsubscribe anytime. We respect your privacy.</p>
                 </div>
             </div>
         </section>
@@ -438,70 +433,6 @@
         </div>
     </footer>
 
-    <script>
-        async function handleSubmit(event) {
-            event.preventDefault();
-            const email = document.getElementById('email').value;
-            const form = document.getElementById('signup-form');
-            const success = document.getElementById('success-message');
-            const submitBtn = form.querySelector('.submit-btn');
-            
-            // Show loading state
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Subscribing...';
-            submitBtn.disabled = true;
-            
-            // Webhook URL - update this with your public webhook URL
-            // For local testing: 'http://localhost:8080'
-            // For production: 'https://your-ngrok-url.ngrok.io'
-            const WEBHOOK_URL = 'https://corporational-cari-concomitantly.ngrok-free.dev'; // Your ngrok URL
-            
-            try {
-                // Try our API first
-                let response = await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email })
-                });
-                
-                // If our API fails, try a fallback
-                if (!response.ok && WEBHOOK_URL === '/api/subscribe') {
-                    console.log('Primary API failed, using fallback storage');
-                    // For now, just log to console
-                    // In production, you could send to a different service here
-                }
-                
-                const data = await response.json();
-                
-                if (response.ok || response.status === 200) {
-                    // Show success message
-                    form.style.display = 'none';
-                    success.style.display = 'block';
-                    
-                    // Clear form
-                    document.getElementById('email').value = '';
-                    
-                    console.log('Email subscribed successfully:', email);
-                } else {
-                    alert(data.error || 'Subscription failed. Please try again.');
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                }
-            } catch (error) {
-                console.error('Subscription error:', error);
-                // Fallback: still show success for UX (don't show error to user)
-                form.style.display = 'none';
-                success.style.display = 'block';
-                document.getElementById('email').value = '';
-                
-                // Log the error for debugging
-                console.log('Email captured (offline mode):', email);
-            }
-            
-            return false;
-        }
-    </script>
+    <!-- Fillout form script is loaded above with the embed -->
 </body>
 </html>
