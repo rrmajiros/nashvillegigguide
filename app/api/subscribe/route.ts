@@ -51,16 +51,12 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    // Optional: Return subscriber count (for dashboard)
-    const result = await db.query(
-      'SELECT COUNT(*) as count FROM email_subscribers WHERE source = ?',
-      ['nashvillegigguide']
-    );
-    
+    // Simple health check - don't try to query database in production
     return NextResponse.json(
       { 
-        count: result[0]?.count || 0,
-        message: 'Nashville Gig Guide Email Subscribers API'
+        message: 'Nashville Gig Guide Email Subscribers API',
+        status: 'active',
+        note: 'Use POST to subscribe emails'
       },
       { status: 200 }
     );
