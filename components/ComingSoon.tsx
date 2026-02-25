@@ -1,20 +1,23 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect } from 'react'
 import { MusicalNoteIcon, CalendarIcon, MapPinIcon, BuildingLibraryIcon } from '@heroicons/react/24/outline'
 
 export default function ComingSoon() {
-  const [email, setEmail] = useState('')
-  const [submitted, setSubmitted] = useState(false)
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    // TODO: Connect to email service
-    console.log('Email submitted:', email)
-    setSubmitted(true)
-    setEmail('')
-    setTimeout(() => setSubmitted(false), 3000)
-  }
+  useEffect(() => {
+    // Load Fillout script
+    const script = document.createElement('script')
+    script.src = 'https://server.fillout.com/embed/v1/'
+    script.async = true
+    document.body.appendChild(script)
+    
+    return () => {
+      // Cleanup
+      if (document.body.contains(script)) {
+        document.body.removeChild(script)
+      }
+    }
+  }, [])
 
   const features = [
     {
@@ -71,36 +74,18 @@ export default function ComingSoon() {
             Be the first to know when we launch.
           </p>
 
-          {/* Email Signup */}
-          <div className="max-w-md mx-auto mb-20">
-            {submitted ? (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-                <p className="text-green-800 font-semibold">Thanks! We'll notify you when we launch.</p>
-                <p className="text-green-600 mt-2">You'll be among the first to access Nashville's complete music guide.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Your email address"
-                    className="flex-grow px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nashville-red focus:border-transparent"
-                    required
-                  />
-                  <button
-                    type="submit"
-                    className="btn-primary whitespace-nowrap"
-                  >
-                    Get Early Access
-                  </button>
-                </div>
-                <p className="text-sm text-gray-500">
-                  No spam. Unsubscribe anytime. We respect your privacy.
-                </p>
-              </form>
-            )}
+          {/* Email Signup - Fillout Form */}
+          <div className="max-w-2xl mx-auto mb-20">
+            <div 
+              style={{ width: '100%', height: '500px' }} 
+              data-fillout-id="no1NpSyBbmus" 
+              data-fillout-embed-type="standard" 
+              data-fillout-inherit-parameters 
+              data-fillout-dynamic-resize
+            ></div>
+            <p className="text-sm text-gray-500 text-center mt-4">
+              No spam. Unsubscribe anytime. We respect your privacy.
+            </p>
           </div>
 
           {/* Features */}
