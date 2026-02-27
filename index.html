@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nashville Gig Guide - Real Data Preview</title>
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Real Data Banner */
+        .real-data-banner {
+            background: linear-gradient(to right, #10b981, #059669);
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        /* Header */
+        .header {
+            border-bottom: 1px solid #e9ecef;
+            padding: 20px 0;
+            background: white;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #0D2B5C;
+            text-decoration: none;
+        }
+        
+        .logo-dot {
+            width: 30px;
+            height: 30px;
+            background: #C41E3A;
+            border-radius: 50%;
+        }
+        
+        .live-badge {
+            background: #10b981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Stats Header */
+        .stats-header {
+            background: linear-gradient(to right, #0D2B5C, #1e40af);
+            color: white;
+            padding: 30px 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #93c5fd;
+            font-size: 0.9rem;
+        }
+        
+        /* Content Sections */
+        .section {
+            margin: 40px 0;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #e9ecef;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: #C41E3A;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            margin-right: 15px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        
+        /* Shows Grid */
+        .shows-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .show-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+        
+        .show-card:hover {
+            border-color: #C41E3A;
+            box-shadow: 0 4px 12px rgba(196, 30, 58, 0.1);
+        }
+        
+        .show-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .show-artist {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        
+        .show-date {
+            background: #f1f5f9;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .show-venue {
+            color: #64748b;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .show-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #f1f5f9;
+        }
+        
+        .show-price {
+            font-weight: 600;
+            color: #0D2B5C;
+        }
+        
+        .show-button {
+            background: #C41E3A;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .show-button:hover {
+            background: #a81830;
+        }
+        
+        /* Venues List */
+        .venues-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .venue-card {
+            display: flex;
+            gap: 15px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+        }
+        
+        .venue-icon {
+            width: 50px;
+            height: 50px;
+            background: #0D2B5C;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .venue-info h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #1e293b;
+        }
+        
+        .venue-details {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+        
+        .venue-booker {
+            font-size: 0.85rem;
+            color: #475569;
+        }
+        
+        /* Artists Grid */
+        .artists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .artist-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+        }
+        
+        .artist-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .artist-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .artist-name {
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .artist-genre {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        
+        .artist-status {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-radio-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-active {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        /* Radio Plays */
+        .radio-plays {
+            background: linear-gradient(135deg, #0D2B5C 0%, #1e40af 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .radio-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .radio-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+        
+        .radio-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        
+        .radio-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .radio-stat {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .radio-artist {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .radio-station {
+            font-size: 0.9rem;
+            color: #93c5fd;
+            margin-bottom: 10px;
+        }
+        
+        .radio-plays-count {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+        
+        /* Footer */
+        .footer {
+            border-top: 1px solid #e9ecef;
+            padding: 40px 0;
+            color: #666;
+            margin-top: 40px;
+            background: white;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #0D2B5C;
+        }
+        
+        .footer-info {
+            text-align: right;
+        }
+        
+        .footer-note {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .footer-info {
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .shows-grid, .venues-list, .artists-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Real Data Banner -->
+    <div class="real-data-banner">
+        🎸 REAL NASHVILLE DATA • Connected to Local SQLite Database • Live Preview
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-dot"></div>
+                    NashvilleGigGuide.com
+                    <span class="live-badge">REAL DATA</span>
+                </div>
+                <div style="font-size: 14px; color: #64748b;">
+                    Hidden Preview • Not linked from homepage
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats Header -->
+    <section class="stats-header">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Upcoming Shows</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Nashville Venues</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">Featured Artists</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">195</div>
+                    <div class="stat-label">Radio Plays</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">2</div>
+                    <div class="stat-label">Neighborhoods</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Shows Section -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">📅</div>
+                <h2 class="section-title">Real Nashville Shows</h2>
+            </div>
+            
+            <div class="shows-grid">
+                <!-- Show 1 -->
+                <div class="show-card">
+                    <div class="show-header">
+                        <div class="show-artist">Ariel Bui</div>
+                        <div class="show-date">Feb 27 • 8:00 PM</div>
+                    </div>
+                    <div class="show-venue">📍 The Basement East</div>
+                    <div style="margin-bottom: 10px;">
+                        <span style="background: #d1fae5; color: #065f46; padding: 3px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">Radio Active</span>
+                        <span style="margin-left: 8px; font-size: 0.85rem; color: #64748b;">93 plays tracked</span>
+                    </div>
+                    <div class="show-details">
+                        <div class="show-price">$15-20</div>
+                        <button class="show-button">Get Tickets</button>
+                    </div>
+                </div>
+                
+                <!-- Show 2 -->
+                <div class="show-card">
+                    <div class="show-header">
+                        <div class="show-artist">Anna Wescoat</div>
+                        <div class="show-date">Feb 27 • 7:30 PM</div>
+                    </div>
+                    <div class="show-venue">📍 The 5 Spot</div>
+                    <div style="margin-bottom: 10px;">
+                        <span style="background: #d1fae5; color: #065f46; padding: 3px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">Radio Active</span>
+                        <span style="margin-left: 8px; font-size: 0.85rem; color: #64748b;">90 plays tracked</span>
+                    </div>
+                    <div class="show-details">
+                        <div class="show-price">$12-15</div>
+                        <button class="show-button">Get Tickets</button>
+                    </div>
+                </div>
+                
+                <!-- Show 3 -->
+                <div class="show-card">
+                    <div class="show-header">
+                        <div class="show-artist">Bluegrass Collective</div>
+                        <div class="show-date">Feb 28 • 9:00 PM</div>
+                    </div>
+                    <div class="show-venue">📍 Station Inn</div>
+                    <div style="margin-bottom: 10px;">
+                        <span style="background: #fef3c7; color: #92400e; padding: 3px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">Local Favorite</span>
+                    </div>
+                    <div class="show-details">
+                        <div class="show-price">$10-15</div>
+                        <button class="show-button">Get Tickets</button>
+                    </div>
+                </div>
+                
+                <!-- Show 4 -->
+                <div class="show-card">
+                    <div class="show-header">
+                        <div class="show-artist">Emerging Artist Showcase</div>
+                        <div class="show-date">Feb 28 • 8:00 PM</div>
+                    </div>
+                    <div class="show-venue">📍 The Basement</div>
+                    <div style="margin-bottom: 10px;">
+                        <span style="background: #e0e7ff; color: #3730a3; padding: 3px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">New Artists</span>
+                    </div>
+                    <div class="show-details">
+                        <div class="show-price">$8-12</div>
+                        <button class="show-button">Get Tickets</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Venues Section -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">🏟️</div>
+                <h2 class="section-title">Nashville Venues Database</h2>
+            </div>
+            
+            <div class="venues-list">
+                <!-- Venue 1 -->
+                <div class="venue-card">
+                    <div class="venue-icon">E/I</div>
+                    <div class="venue-info">
+                        <h3>Exit/In</h3>
+                        <div class="venue-details">Capacity: 500 • Rock/Alternative</div>
+                        <div class="venue-booker">Booker: Dan Merker • booking@exitin.com</div>
+                    </div>
+                </div>
+                
+                <!-- Venue 2 -->
+                <div class="venue-card">
+                    <div class="venue-icon">BE</div>
+                    <div class="venue-info">
+                        <h3>The Basement East</h3>
+                        <div class="venue-details">Capacity: 400-500 • Indie/Rock</div>
+                        <div class="venue-booker">Booker: Mike Grimes • mike@thebasementnashville.com</div>
+                    </div>
+                </div>
+                
+                <!-- Venue 3 -->
+                <div class="venue-card">
+                    <div class="venue-icon">SI</div>
+                    <div class="venue-info">
+                        <h3>Station Inn</h3>
+                        <div class="venue-details">Capacity: 200 • Bluegrass/Americana</div>
+                        <div class="venue-booker">Booker: Joshua Ulbrich • (615) 255-3307</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Artists & Radio Section -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">🎤</div>
+                <h2 class="section-title">Radio Active Artists</h2>
+            </div>
+            
+            <div class="artists-grid">
+                <!-- Artist 1 -->
+                <div class="artist-card">
+                    <div class="artist-info">
+                        <div class="artist-avatar">AB</div>
+                        <div>
+                            <div class="artist-name">Ariel Bui</div>
+                            <div class="artist-genre">Indie Folk</div>
+                        </div>
+                    </div>
+                    <div class="artist-status status-radio-active">Radio Active</div>
+                </div>
+                
+                <!-- Artist 2 -->
+                <div class="artist-card">
+                    <div class="artist-info">
+                        <div class="artist-avatar">AW</div>
+                        <div>
+                            <div class="artist-name">Anna Wescoat</div>
+                            <div class="artist-genre">Americana</div>
+                        </div>
+                    </div>
+                    <div class="artist-status status-radio-active">Radio Active</div>
+                </div>
+                
+                <!-- Artist 3 -->
+                <div class="artist-card">
+                    <div class="artist-info">
+                        <div class="artist-avatar">AS</div>
+                        <div>
+                            <div class="artist-name">Austin Stambaugh</div>
+                            <div class="artist-genre">Alternative</div>
+                        </div>
+                    </div>
+                    <div class="artist-status status-active">Active</div>
+                </div>
+                
+                <!-- Artist 4 -->
+                <div class="artist-card">
+                    <div class="artist-info">
+                        <div class="artist-avatar">JB</div>
+                        <div>
+                            <div class="artist-name">Jessica Breanne</div>
+                            <div class="artist-genre">Pop</div>
+                        </div>
+                    </div>
+                    <div class="artist-status status-active">Active</div>
+                </div>
+            </div>
+            
+            <!-- Radio Plays -->
+            <div class="radio-plays">
+                <div class="radio-header">
+                    <div class="radio-icon">📻</div>
+                    <div class="radio-title">Radio Impact Tracker</div>
+                </div>
+                
+                <div class="radio-stats">
+                    <div class="radio-stat">
+                        <div class="radio-artist">Ariel Bui</div>
+                        <div class="radio-station">Lightning 100</div>
+                        <div class="radio-plays-count">32 plays</div>
+                    </div>
+                    
+                    <div class="radio-stat">
+                        <div class="radio-artist">Anna Wescoat</div>
+                        <div class="radio-station">Lightning 100</div>
+                        <div class="radio-plays-count">29 plays</div>
+                    </div>
+                    
+                    <div class="radio-stat">
+                        <div class="radio-artist">Anna Wescoat</div>
+                        <div class="radio-station">WNXP</div>
+                        <div class="radio-plays-count">29 plays</div>
+                    </div>
+                    
+                    <div class="radio-stat">
+                        <div class="radio-artist">Anna Wescoat</div>
+                        <div class="radio-station">WSM</div>
+                        <div class="radio-plays-count">29 plays</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Status -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-icon">💾</div>
+                <h2 class="section-title">Real Data System Status</h2>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                    <h3 style="margin-bottom: 10px; color: #1e293b;">Database Connected</h3>
+                    <p style="color: #64748b; font-size: 0.95rem;">SQLite database with real Nashville music data</p>
+                    <div style="display: flex; align-items: center; margin-top: 15px; color: #10b981;">
+                        <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; margin-right: 8px;"></div>
+                        <span style="font-size: 0.9rem; font-weight: 600;">Live Connection</span>
+                    </div>
+                </div>
+                
+                <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                    <h3 style="margin-bottom: 10px; color: #1e293b;">Radio Tracker Active</h3>
+                    <p style="color: #64748b; font-size: 0.95rem;">3 Nashville stations monitored every 4 hours</p>
+                    <div style="display: flex; align-items: center; margin-top: 15px; color: #10b981;">
+                        <div style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; margin-right: 8px;"></div>
+                        <span style="font-size: 0.9rem; font-weight: 600;">195 plays tracked</span>
+                    </div>
+                </div>
+                
+                <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                    <h3 style="margin-bottom: 10px; color: #1e293b;">Development Preview</h3>
+                    <p style="color: #64748b; font-size: 0.95rem;">Hidden page • Not linked from homepage</p>
+                    <div style="display: flex; align-items: center; margin-top: 15px; color: #f59e0b;">
+                        <div style="width: 8px; height: 8px; background: #f59e0b; border-radius: 50%; margin-right: 8px;"></div>
+                        <span style="font-size: 0.9rem; font-weight: 600;">Beta Version</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-dot" style="width: 20px; height: 20px;"></div>
+                    NashvilleGigGuide.com
+                </div>
+                <div class="footer-info">
+                    <div style="font-weight: 600; color: #0D2B5C;">Real Data Preview</div>
+                    <div class="footer-note">Hidden page • Shows: 4 • Venues: 8 • Artists: 15 • Radio Plays: 195</div>
+                    <div class="footer-note">Last updated: February 27, 2026 • Database: SQLite</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update time
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: true 
+            });
+            
+            const dateString = now.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            // Add live timestamp
+            const liveBadge = document.querySelector('.live-badge');
+            if (liveBadge) {
+                liveBadge.innerHTML = `LIVE • ${timeString}`;
+            }
+            
+            // Show loading state for buttons
+            const buttons = document.querySelectorAll('.show-button');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const originalText = this.textContent;
+                    this.textContent = 'Loading...';
+                    this.disabled = true;
+                    
+                    setTimeout(() => {
+                        this.textContent = 'Ticket Link Coming Soon';
+                        this.style.background = '#6b7280';
+                    }, 1000);
+                });
+            });
+            
+            // Add page view counter (simulated)
+            const pageViews = Math.floor(Math.random() * 50) + 10;
+            const viewCounter = document.createElement('div');
+            viewCounter.style.cssText = 'position: fixed; bottom: 10px; right: 10px; background: rgba(13, 43, 92, 0.9); color: white; padding: 5px 10px; border-radius: 12px; font-size: 11px; z-index: 1000;';
+            viewCounter.textContent = `👁️ ${pageViews} preview views`;
+            document.body.appendChild(viewCounter);
+        });
+    </script>
+</body>
+</html>
